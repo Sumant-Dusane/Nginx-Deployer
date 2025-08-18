@@ -1,3 +1,9 @@
+# NGINX DEPLOYER
+
+## Installation
+`curl -fsSL https://raw.githubusercontent.com/Sumant-Dusane/nginx-deployer/master/install.sh`
+
+## MVP
 1. Scans the folders
 2. Takes input for deployment
 3. Takes input for domain name or ip address

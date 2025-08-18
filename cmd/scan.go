@@ -20,8 +20,7 @@ func init() {
 }
 
 func ScanCmd(cmd *cobra.Command, args []string) {
-	allEntries := Scan(cmd, args)
-	printTable(allEntries)
+	Scan(cmd, args)
 }
 
 func Scan(cmd *cobra.Command, args []string) []dtos.ProgramDto {

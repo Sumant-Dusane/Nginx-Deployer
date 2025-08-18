@@ -7,36 +7,36 @@ import (
 )
 
 func InstallNginx() {
-	cmd := exec.Command("nginx", "-v")
+	cmd := exec.Command("systemctl", "status", "nginx")
 	err := cmd.Run()
 
 	if err != nil {
 		fmt.Println("Nginx not installed, installing... ", err)
-		cmd = exec.Command("sudo", "apt-get", "update")
+		cmd = exec.Command("apt-get", "update")
 		err = cmd.Run()
 		if err != nil {
 			fmt.Println("Error updating apt: ", err)
 			os.Exit(1)
 		}
-		cmd = exec.Command("sudo", "apt-get", "install", "nginx")
+		cmd = exec.Command("apt-get", "install", "nginx")
 		err = cmd.Run()
 		if err != nil {
 			fmt.Println("Error installing nginx: ", err)
 			os.Exit(1)
 		}
-		cmd = exec.Command("sudo", "systemctl", "start", "nginx")
+		cmd = exec.Command("systemctl", "start", "nginx")
 		err = cmd.Run()
 		if err != nil {
 			fmt.Println("Error starting nginx: ", err)
 			os.Exit(1)
 		}
-		cmd = exec.Command("sudo", "systemctl", "enable", "nginx")
+		cmd = exec.Command("systemctl", "enable", "nginx")
 		err = cmd.Run()
 		if err != nil {
 			fmt.Println("Error enabling nginx: ", err)
 			os.Exit(1)
 		}
-		cmd = exec.Command("sudo", "systemctl", "status", "nginx")
+		cmd = exec.Command("systemctl", "status", "nginx")
 		err = cmd.Run()
 		if err != nil {
 			fmt.Println("Error checking nginx status: ", err)
@@ -57,7 +57,7 @@ func CreateNginxConfig(fileName *string) *os.File {
 	}
 
 	if fileCreationErr != nil {
-		fmt.Println("Error creating file: ", fileCreationErr)
+		fmt.Println("Error configuring nginx: ", fileCreationErr)
 		os.Exit(1)
 	}
 
@@ -65,26 +65,26 @@ func CreateNginxConfig(fileName *string) *os.File {
 }
 
 func AddStaticDeploymentConfig(file *os.File, domain string, directory string) {
-	file.WriteString("server {")
-	file.WriteString("  listen 80;")
-	file.WriteString("  listen [::]:80;")
-	file.WriteString("  root " + directory + ";")
-	file.WriteString("  server_name " + domain + ";")
-	file.WriteString("  index index.html index.htm index.nginx-debian.html;")
-	file.WriteString("  location / {")
-	file.WriteString("    try_files $uri $uri/ =404;")
-	file.WriteString("  }")
-	file.WriteString("}")
+	file.WriteString("server {\n")
+	file.WriteString("  listen 80;\n")
+	file.WriteString("  listen [::]:80;\n")
+	file.WriteString("  root " + directory + ";\n")
+	file.WriteString("  server_name " + domain + ";\n")
+	file.WriteString("  index index.html index.htm index.nginx-debian.html;\n")
+	file.WriteString("  location / {\n")
+	file.WriteString("    try_files $uri $uri/ =404;\n")
+	file.WriteString("  }\n")
+	file.WriteString("}\n")
 }
 
 func AddSpaDeploymentConfig(file *os.File, domain string, directory string, port string) {
-	file.WriteString("server {")
-	file.WriteString("  listen 80;")
-	file.WriteString("  listen [::]:80;")
-	file.WriteString("  server_name " + domain + ";")
-	file.WriteString("  location / {")
-	file.WriteString("    proxy_pass http://localhost:" + port + ";")
-	file.WriteString("    proxy_pass_header Host $host;")
-	file.WriteString("  }")
-	file.WriteString("}")
+	file.WriteString("server {\n")
+	file.WriteString("  listen 80;\n")
+	file.WriteString("  listen [::]:80;\n")
+	file.WriteString("  server_name " + domain + ";\n")
+	file.WriteString("  location / {\n")
+	file.WriteString("    proxy_pass http://localhost:" + port + ";\n")
+	file.WriteString("    proxy_pass_header Host $host;\n")
+	file.WriteString("  }\n")
+	file.WriteString("}\n")
 }
