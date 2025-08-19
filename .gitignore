@@ -78,3 +78,6 @@ debug.test
 # Backup files
 *.bak
 *.backup
+
+
+nginx-deployer_linux_arm_64

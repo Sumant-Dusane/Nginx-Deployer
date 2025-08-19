@@ -7,13 +7,17 @@ on:
 
 jobs:
   build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
+      - name: Checkout code
       - uses: actions/checkout@v3
 
       - name: Setup Go
         uses: actions/setup-go@v4
         with:
-        go-version: 1.24.5
+          go-version: 1.24.5
       
       - name: Build Binary
         run: GOOS=linux GOARCH=arm64 go build -o nginx-deployer_linux_arm_64
@@ -26,8 +30,6 @@ jobs:
         with:
           tag_name: ${{ github.ref_name }}
           release_name: ${{ github.ref_name }}
-        draft: false
-        prerelease: false
       
       - name: Upload Binary File
         uses: actions/upload-release-assets@v1
