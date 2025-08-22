@@ -14,6 +14,7 @@
 
 
 ## Future Scopes
+- Print and log steps in the flow
 - Cross OS versions mac, win, linux
 - Security & Headers
 - Load Balancer

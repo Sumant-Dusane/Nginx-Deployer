@@ -54,4 +54,12 @@ func DeployNginx(directory string, port string, isDeploymentStatic bool, domain 
 	}
 
 	fmt.Println("Successfully deployed on http://" + domain)
+	fmt.Println("Would you like to deploy on https://" + domain + "? (y/n)")
+	var deployOnHttps string
+	fmt.Scanf("%s", &deployOnHttps)
+
+	if deployOnHttps == "y" {
+		utils.InstallCertbot()
+		utils.RunCertbotForHttps(domain)
+	}
 }

@@ -47,6 +47,28 @@ func InstallNginx() {
 
 }
 
+func InstallCertbot() {
+	cmd := exec.Command("certbot", "--version")
+	err := cmd.Run()
+
+	if err != nil {
+		fmt.Println("Certbot not installed, installing... ", err)
+		cmd := exec.Command("apt-get", "update")
+		err := cmd.Run()
+		if err != nil {
+			fmt.Println("Error updating apt: ", err)
+			os.Exit(1)
+		}
+		cmd = exec.Command("apt-get", "install", "certbot", "python3-certbot-nginx")
+		err = cmd.Run()
+		if err != nil {
+			fmt.Println("Error installing certbot: ", err)
+			os.Exit(1)
+		}
+		fmt.Println("Certbot installed successfully")
+	}
+}
+
 func CreateNginxConfig(fileName *string) *os.File {
 	var file *os.File
 	var fileCreationErr error
@@ -87,4 +109,15 @@ func AddSpaDeploymentConfig(file *os.File, domain string, directory string, port
 	file.WriteString("    proxy_pass_header Host $host;\n")
 	file.WriteString("  }\n")
 	file.WriteString("}\n")
+}
+
+func RunCertbotForHttps(domain string) {
+	cmd := exec.Command("certbot", "--nginx", "-d", domain, "-d", "www."+domain)
+	err := cmd.Run()
+	if err != nil {
+		fmt.Println("Error running certbot: ", err)
+		fmt.Println("Server is still running on http://" + domain)
+		os.Exit(1)
+	}
+	fmt.Println("Successfully deployed on https://" + domain)
 }

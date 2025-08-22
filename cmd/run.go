@@ -20,8 +20,9 @@ func Run(cmd *cobra.Command, args []string) {
 	fmt.Printf("Domain Name or IP Address: ")
 	fmt.Scanf("%s", &domain)
 
-	directory := program.Source + "/" + program.Name
+	directory := program.Source + program.Name
 	isDeploymentStatic := program.Source != "docker"
 
 	DeployNginx(directory, program.Port, isDeploymentStatic, domain)
+	fmt.Println("Thanks for using nginx-deployer. Developed with ❤️ by @Sumant-Dusane")
 }
