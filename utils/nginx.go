@@ -113,6 +113,11 @@ func AddSpaDeploymentConfig(file *os.File, domain string, directory string, port
 
 func RunCertbotForHttps(domain string) {
 	cmd := exec.Command("certbot", "--nginx", "-d", domain, "-d", "www."+domain)
+
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
 	err := cmd.Run()
 	if err != nil {
 		fmt.Println("Error running certbot: ", err)
